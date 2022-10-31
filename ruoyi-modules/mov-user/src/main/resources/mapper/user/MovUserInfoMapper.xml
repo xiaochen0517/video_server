@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fun.mochen.video.user.mapper.MovUserInfoMapper">
+    
+    <resultMap type="MovUserInfo" id="MovUserInfoResult">
+        <result property="id"    column="id"    />
+        <result property="firstName"    column="first_name"    />
+        <result property="lastName"    column="last_name"    />
+        <result property="gender"    column="gender"    />
+        <result property="idCard"    column="id_card"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="bloodType"    column="blood_type"    />
+        <result property="profession"    column="profession"    />
+        <result property="hometown"    column="hometown"    />
+        <result property="residence"    column="residence"    />
+        <result property="verified"    column="verified"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectMovUserInfoVo">
+        select id, first_name, last_name, gender, id_card, birthday, blood_type, profession, hometown, residence, verified, del_flag, create_by, create_time, update_by, update_time, remark from mov_user_info
+    </sql>
+
+    <select id="selectMovUserInfoList" parameterType="MovUserInfo" resultMap="MovUserInfoResult">
+        <include refid="selectMovUserInfoVo"/>
+        <where>  
+            <if test="firstName != null  and firstName != ''"> and first_name like concat('%', #{firstName}, '%')</if>
+            <if test="lastName != null  and lastName != ''"> and last_name like concat('%', #{lastName}, '%')</if>
+            <if test="gender != null  and gender != ''"> and gender = #{gender}</if>
+            <if test="idCard != null  and idCard != ''"> and id_card = #{idCard}</if>
+            <if test="birthday != null "> and birthday = #{birthday}</if>
+            <if test="bloodType != null  and bloodType != ''"> and blood_type = #{bloodType}</if>
+            <if test="profession != null  and profession != ''"> and profession = #{profession}</if>
+            <if test="hometown != null  and hometown != ''"> and hometown = #{hometown}</if>
+            <if test="residence != null  and residence != ''"> and residence = #{residence}</if>
+            <if test="verified != null  and verified != ''"> and verified = #{verified}</if>
+        </where>
+    </select>
+    
+    <select id="selectMovUserInfoById" parameterType="Long" resultMap="MovUserInfoResult">
+        <include refid="selectMovUserInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMovUserInfo" parameterType="MovUserInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into mov_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="firstName != null">first_name,</if>
+            <if test="lastName != null">last_name,</if>
+            <if test="gender != null">gender,</if>
+            <if test="idCard != null">id_card,</if>
+            <if test="birthday != null">birthday,</if>
+            <if test="bloodType != null">blood_type,</if>
+            <if test="profession != null">profession,</if>
+            <if test="hometown != null">hometown,</if>
+            <if test="residence != null">residence,</if>
+            <if test="verified != null">verified,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="firstName != null">#{firstName},</if>
+            <if test="lastName != null">#{lastName},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="idCard != null">#{idCard},</if>
+            <if test="birthday != null">#{birthday},</if>
+            <if test="bloodType != null">#{bloodType},</if>
+            <if test="profession != null">#{profession},</if>
+            <if test="hometown != null">#{hometown},</if>
+            <if test="residence != null">#{residence},</if>
+            <if test="verified != null">#{verified},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMovUserInfo" parameterType="MovUserInfo">
+        update mov_user_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="firstName != null">first_name = #{firstName},</if>
+            <if test="lastName != null">last_name = #{lastName},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="idCard != null">id_card = #{idCard},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="bloodType != null">blood_type = #{bloodType},</if>
+            <if test="profession != null">profession = #{profession},</if>
+            <if test="hometown != null">hometown = #{hometown},</if>
+            <if test="residence != null">residence = #{residence},</if>
+            <if test="verified != null">verified = #{verified},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMovUserInfoById" parameterType="Long">
+        delete from mov_user_info where id = #{id}
+    </delete>
+
+    <delete id="deleteMovUserInfoByIds" parameterType="String">
+        delete from mov_user_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
