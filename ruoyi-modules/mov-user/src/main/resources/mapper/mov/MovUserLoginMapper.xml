@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fun.mochen.video.user.mapper.MovUserLoginMapper">
+    
+    <resultMap type="MovUserLogin" id="MovUserLoginResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="loginTime"    column="login_time"    />
+        <result property="loginIp"    column="login_ip"    />
+        <result property="systemInfo"    column="system_info"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectMovUserLoginVo">
+        select id, user_id, login_time, login_ip, system_info, status, del_flag, create_by, create_time, update_by, update_time, remark from mov_user_login
+    </sql>
+
+    <select id="selectMovUserLoginList" parameterType="MovUserLogin" resultMap="MovUserLoginResult">
+        <include refid="selectMovUserLoginVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="params.beginLoginTime != null and params.beginLoginTime != '' and params.endLoginTime != null and params.endLoginTime != ''"> and login_time between #{params.beginLoginTime} and #{params.endLoginTime}</if>
+            <if test="loginIp != null  and loginIp != ''"> and login_ip like concat('%', #{loginIp}, '%')</if>
+            <if test="systemInfo != null  and systemInfo != ''"> and system_info like concat('%', #{systemInfo}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectMovUserLoginById" parameterType="Long" resultMap="MovUserLoginResult">
+        <include refid="selectMovUserLoginVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMovUserLogin" parameterType="MovUserLogin" useGeneratedKeys="true" keyProperty="id">
+        insert into mov_user_login
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="loginTime != null">login_time,</if>
+            <if test="loginIp != null">login_ip,</if>
+            <if test="systemInfo != null">system_info,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="loginTime != null">#{loginTime},</if>
+            <if test="loginIp != null">#{loginIp},</if>
+            <if test="systemInfo != null">#{systemInfo},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMovUserLogin" parameterType="MovUserLogin">
+        update mov_user_login
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="loginTime != null">login_time = #{loginTime},</if>
+            <if test="loginIp != null">login_ip = #{loginIp},</if>
+            <if test="systemInfo != null">system_info = #{systemInfo},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMovUserLoginById" parameterType="Long">
+        delete from mov_user_login where id = #{id}
+    </delete>
+
+    <delete id="deleteMovUserLoginByIds" parameterType="String">
+        delete from mov_user_login where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

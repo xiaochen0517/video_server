@@ -1,5 +1,6 @@
 package com.ruoyi.gateway.filter;
 
+import com.ruoyi.common.core.utils.TokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class AuthFilter implements GlobalFilter, Ordered
         {
             return chain.filter(exchange);
         }
-        String token = getToken(request);
+        String token = TokenUtils.getToken(request);
         if (StringUtils.isEmpty(token))
         {
             return unauthorizedResponse(exchange, "令牌不能为空");
@@ -111,20 +112,6 @@ public class AuthFilter implements GlobalFilter, Ordered
     private String getTokenKey(String token)
     {
         return CacheConstants.LOGIN_TOKEN_KEY + token;
-    }
-
-    /**
-     * 获取请求token
-     */
-    private String getToken(ServerHttpRequest request)
-    {
-        String token = request.getHeaders().getFirst(TokenConstants.AUTHENTICATION);
-        // 如果前端设置了令牌前缀，则裁剪掉前缀
-        if (StringUtils.isNotEmpty(token) && token.startsWith(TokenConstants.PREFIX))
-        {
-            token = token.replaceFirst(TokenConstants.PREFIX, StringUtils.EMPTY);
-        }
-        return token;
     }
 
     @Override

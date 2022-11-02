@@ -12,7 +12,7 @@ import fun.mochen.video.user.service.IMovUserInfoService;
  * 网站用户信息Service业务层处理
  * 
  * @author MoChen
- * @date 2022-10-31
+ * @date 2022-11-02
  */
 @Service
 public class MovUserInfoServiceImpl implements IMovUserInfoService 

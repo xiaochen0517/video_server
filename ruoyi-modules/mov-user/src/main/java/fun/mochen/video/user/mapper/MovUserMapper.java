@@ -7,7 +7,7 @@ import fun.mochen.video.user.domain.MovUser;
  * 网站用户Mapper接口
  * 
  * @author MoChen
- * @date 2022-10-31
+ * @date 2022-11-02
  */
 public interface MovUserMapper 
 {
@@ -58,4 +58,11 @@ public interface MovUserMapper
      * @return 结果
      */
     public int deleteMovUserByIds(Long[] ids);
+
+    /**
+     * 获取网站用户
+     * @param username 用户名
+     * @return 用户登录信息
+     */
+    MovUser findUserByUsername(String username);
 }

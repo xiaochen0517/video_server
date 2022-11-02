@@ -11,7 +11,7 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
  * 网站用户对象 mov_user
  * 
  * @author MoChen
- * @date 2022-10-31
+ * @date 2022-11-02
  */
 public class MovUser extends BaseEntity
 {
@@ -49,8 +49,8 @@ public class MovUser extends BaseEntity
     @Excel(name = "VIP过期时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date vipTime;
 
-    /** 帐号状态（0正常 1停用） */
-    @Excel(name = "帐号状态", readConverterExp = "0=正常,1=停用")
+    /** 帐号状态 */
+    @Excel(name = "帐号状态")
     private String status;
 
     /** 删除标志（0代表存在 2代表删除） */

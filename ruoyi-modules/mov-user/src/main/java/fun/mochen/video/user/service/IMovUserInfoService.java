@@ -7,7 +7,7 @@ import fun.mochen.video.user.domain.MovUserInfo;
  * 网站用户信息Service接口
  * 
  * @author MoChen
- * @date 2022-10-31
+ * @date 2022-11-02
  */
 public interface IMovUserInfoService 
 {

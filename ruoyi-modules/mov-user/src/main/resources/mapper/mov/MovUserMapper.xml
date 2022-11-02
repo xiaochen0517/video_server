@@ -32,10 +32,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="username != null  and username != ''"> and username like concat('%', #{username}, '%')</if>
             <if test="password != null  and password != ''"> and password = #{password}</if>
             <if test="nickName != null  and nickName != ''"> and nick_name like concat('%', #{nickName}, '%')</if>
-            <if test="avatar != null  and avatar != ''"> and avatar = #{avatar}</if>
-            <if test="email != null  and email != ''"> and email = #{email}</if>
-            <if test="phonenumber != null  and phonenumber != ''"> and phonenumber = #{phonenumber}</if>
-            <if test="vipTime != null "> and vip_time = #{vipTime}</if>
+            <if test="email != null  and email != ''"> and email like concat('%', #{email}, '%')</if>
+            <if test="phonenumber != null  and phonenumber != ''"> and phonenumber like concat('%', #{phonenumber}, '%')</if>
+            <if test="params.beginVipTime != null and params.beginVipTime != '' and params.endVipTime != null and params.endVipTime != ''"> and vip_time between #{params.beginVipTime} and #{params.endVipTime}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
     </select>
@@ -112,4 +111,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="findUserByUsername" resultType="MovUser">
+        <include refid="selectMovUserVo"/>
+        <where>
+            <if test="username != null  and username != ''"> and username = #{username}</if>
+        </where>
+    </select>
 </mapper>

@@ -33,13 +33,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="firstName != null  and firstName != ''"> and first_name like concat('%', #{firstName}, '%')</if>
             <if test="lastName != null  and lastName != ''"> and last_name like concat('%', #{lastName}, '%')</if>
-            <if test="gender != null  and gender != ''"> and gender = #{gender}</if>
-            <if test="idCard != null  and idCard != ''"> and id_card = #{idCard}</if>
-            <if test="birthday != null "> and birthday = #{birthday}</if>
+            <if test="gender != null  and gender != ''"> and gender like concat('%', #{gender}, '%')</if>
+            <if test="idCard != null  and idCard != ''"> and id_card like concat('%', #{idCard}, '%')</if>
+            <if test="params.beginBirthday != null and params.beginBirthday != '' and params.endBirthday != null and params.endBirthday != ''"> and birthday between #{params.beginBirthday} and #{params.endBirthday}</if>
             <if test="bloodType != null  and bloodType != ''"> and blood_type = #{bloodType}</if>
-            <if test="profession != null  and profession != ''"> and profession = #{profession}</if>
-            <if test="hometown != null  and hometown != ''"> and hometown = #{hometown}</if>
-            <if test="residence != null  and residence != ''"> and residence = #{residence}</if>
+            <if test="profession != null  and profession != ''"> and profession like concat('%', #{profession}, '%')</if>
+            <if test="hometown != null  and hometown != ''"> and hometown like concat('%', #{hometown}, '%')</if>
+            <if test="residence != null  and residence != ''"> and residence like concat('%', #{residence}, '%')</if>
             <if test="verified != null  and verified != ''"> and verified = #{verified}</if>
         </where>
     </select>

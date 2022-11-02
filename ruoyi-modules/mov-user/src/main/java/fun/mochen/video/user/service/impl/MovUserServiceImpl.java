@@ -12,7 +12,7 @@ import fun.mochen.video.user.service.IMovUserService;
  * 网站用户Service业务层处理
  * 
  * @author MoChen
- * @date 2022-10-31
+ * @date 2022-11-02
  */
 @Service
 public class MovUserServiceImpl implements IMovUserService 
@@ -92,5 +92,10 @@ public class MovUserServiceImpl implements IMovUserService
     public int deleteMovUserById(Long id)
     {
         return movUserMapper.deleteMovUserById(id);
+    }
+
+    @Override
+    public MovUser findUserByUsername(String username) {
+        return movUserMapper.findUserByUsername(username);
     }
 }

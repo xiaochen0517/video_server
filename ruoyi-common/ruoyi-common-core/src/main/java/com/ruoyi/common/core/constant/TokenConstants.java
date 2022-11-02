@@ -13,6 +13,11 @@ public class TokenConstants
     public static final String AUTHENTICATION = "Authorization";
 
     /**
+     * 网站用户令牌标识
+     */
+    public static final String MOVTOKEN = "Token";
+
+    /**
      * 令牌前缀
      */
     public static final String PREFIX = "Bearer ";

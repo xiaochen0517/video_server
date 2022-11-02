@@ -11,7 +11,7 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
  * 网站用户信息对象 mov_user_info
  * 
  * @author MoChen
- * @date 2022-10-31
+ * @date 2022-11-02
  */
 public class MovUserInfo extends BaseEntity
 {
@@ -57,8 +57,8 @@ public class MovUserInfo extends BaseEntity
     @Excel(name = "居住地")
     private String residence;
 
-    /** 实名认证（0 未认证 1 已认证） */
-    @Excel(name = "实名认证", readConverterExp = "0=,未=认证,1=,已=认证")
+    /** 实名认证 */
+    @Excel(name = "实名认证")
     private String verified;
 
     /** 删除标志（0代表存在 2代表删除） */
