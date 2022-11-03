@@ -4,15 +4,20 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.CharBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.util.LinkedCaseInsensitiveMap;
 import org.springframework.web.context.request.RequestAttributes;
@@ -22,6 +27,7 @@ import com.alibaba.fastjson2.JSON;
 import com.ruoyi.common.core.constant.Constants;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.text.Convert;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -298,5 +304,22 @@ public class ServletUtils
         R<?> result = R.fail(code, value.toString());
         DataBuffer dataBuffer = response.bufferFactory().wrap(JSON.toJSONString(result).getBytes());
         return response.writeWith(Mono.just(dataBuffer));
+    }
+
+    /**
+     * 获取请求体字符串
+     * @param serverHttpRequest 请求数据
+     * @return 返回获取到的请求
+     */
+    public static String getRequestBodyString(ServerHttpRequest serverHttpRequest) {
+        // 获取请求体
+        Flux<DataBuffer> body = serverHttpRequest.getBody();
+        AtomicReference<String> bodyRef = new AtomicReference<>();
+        body.subscribe(buffer -> {
+            CharBuffer charBuffer = StandardCharsets.UTF_8.decode(buffer.asByteBuffer());
+            DataBufferUtils.release(buffer);
+            bodyRef.set(charBuffer.toString());
+        });
+        return bodyRef.get();
     }
 }

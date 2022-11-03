@@ -1,6 +1,8 @@
 package com.ruoyi.gateway.service;
 
 import java.io.IOException;
+
+import com.aliyuncs.afs.model.v20180112.AuthenticateSigRequest;
 import com.ruoyi.common.core.exception.CaptchaException;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 
@@ -20,4 +22,7 @@ public interface ValidateCodeService
      * 校验验证码
      */
     public void checkCaptcha(String key, String value) throws CaptchaException;
+
+    public void checkAliValidate(AuthenticateSigRequest request) throws CaptchaException;
+
 }

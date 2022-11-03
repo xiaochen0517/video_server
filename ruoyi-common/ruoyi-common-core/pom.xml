@@ -119,6 +119,11 @@
             <artifactId>swagger-annotations</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>mov-common-aliyun</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

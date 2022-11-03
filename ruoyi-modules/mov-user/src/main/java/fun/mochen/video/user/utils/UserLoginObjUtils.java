@@ -4,6 +4,12 @@ import com.ruoyi.system.api.domain.SysUser;
 import com.ruoyi.system.api.model.LoginUser;
 import fun.mochen.video.user.domain.vo.MovUserVo;
 
+/**
+ * 用户登录模块对象处理工具类
+ *
+ * @author MoChen
+ * @time 2022/11/3
+ */
 public class UserLoginObjUtils {
 
     /**

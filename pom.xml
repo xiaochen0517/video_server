@@ -39,6 +39,10 @@
         <commons-collections.version>3.2.2</commons-collections.version>
         <transmittable-thread-local.version>2.13.2</transmittable-thread-local.version>
         <lombok.version>1.18.24</lombok.version>
+        <aliyun.sdk.core>4.5.13</aliyun.sdk.core>
+        <aliyun.sdk.afs>1.0.1</aliyun.sdk.afs>
+        <aliyun.sdk.dm>3.1.0</aliyun.sdk.dm>
+        <hutool.version>5.8.9</hutool.version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -175,6 +179,34 @@
                 <version>${lombok.version}</version>
             </dependency>
 
+            <!-- aliyun sdk -->
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-core</artifactId>
+                <version>${aliyun.sdk.core}</version>
+            </dependency>
+
+            <!-- aliyun sdk afs -->
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-afs</artifactId>
+                <version>${aliyun.sdk.afs}</version>
+            </dependency>
+
+            <!-- aliyun sdk dm -->
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-dm</artifactId>
+                <version>${aliyun.sdk.dm}</version>
+            </dependency>
+
+            <!-- hutool -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
             <!-- 核心模块 -->
             <dependency>
                 <groupId>com.ruoyi</groupId>
@@ -235,6 +267,12 @@
             <dependency>
                 <groupId>com.ruoyi</groupId>
                 <artifactId>ruoyi-api-system</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>mov-common-aliyun</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
 

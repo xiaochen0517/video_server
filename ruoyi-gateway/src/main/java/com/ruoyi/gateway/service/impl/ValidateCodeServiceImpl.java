@@ -5,6 +5,17 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
+
+import com.aliyuncs.IAcsClient;
+import com.aliyuncs.afs.model.v20180112.AuthenticateSigRequest;
+import com.aliyuncs.afs.model.v20180112.AuthenticateSigResponse;
+import com.aliyuncs.dm.model.v20151123.SingleSendMailRequest;
+import com.aliyuncs.dm.model.v20151123.SingleSendMailResponse;
+import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.exceptions.ServerException;
+import com.aliyuncs.http.MethodType;
+import com.ruoyi.common.core.utils.aliyun.AliyunClientProfile;
+import com.ruoyi.gateway.config.aliyun.GatewayAliyunClientProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FastByteArrayOutputStream;
@@ -21,13 +32,16 @@ import com.ruoyi.gateway.config.properties.CaptchaProperties;
 import com.ruoyi.gateway.service.ValidateCodeService;
 
 /**
- * 验证码实现处理
+ * 验证码后端验证处理
  *
- * @author ruoyi
+ * @author MoChen
+ * @time 2022/11/3
  */
 @Service
-public class ValidateCodeServiceImpl implements ValidateCodeService
-{
+public class ValidateCodeServiceImpl implements ValidateCodeService {
+
+    private static final int ALI_VALIDATE_SUCCESS_CODE = 100;
+
     @Resource(name = "captchaProducer")
     private Producer captchaProducer;
 
@@ -40,17 +54,18 @@ public class ValidateCodeServiceImpl implements ValidateCodeService
     @Autowired
     private CaptchaProperties captchaProperties;
 
+    @Autowired
+    private GatewayAliyunClientProfile aliyunClientProfile;
+
     /**
-     * 生成验证码
+     * 生成后台图片验证码
      */
     @Override
-    public AjaxResult createCaptcha() throws IOException, CaptchaException
-    {
+    public AjaxResult createCaptcha() throws IOException, CaptchaException {
         AjaxResult ajax = AjaxResult.success();
         boolean captchaEnabled = captchaProperties.getEnabled();
         ajax.put("captchaEnabled", captchaEnabled);
-        if (!captchaEnabled)
-        {
+        if (!captchaEnabled) {
             return ajax;
         }
 
@@ -63,15 +78,12 @@ public class ValidateCodeServiceImpl implements ValidateCodeService
 
         String captchaType = captchaProperties.getType();
         // 生成验证码
-        if ("math".equals(captchaType))
-        {
+        if ("math".equals(captchaType)) {
             String capText = captchaProducerMath.createText();
             capStr = capText.substring(0, capText.lastIndexOf("@"));
             code = capText.substring(capText.lastIndexOf("@") + 1);
             image = captchaProducerMath.createImage(capStr);
-        }
-        else if ("char".equals(captchaType))
-        {
+        } else if ("char".equals(captchaType)) {
             capStr = code = captchaProducer.createText();
             image = captchaProducer.createImage(capStr);
         }
@@ -79,12 +91,9 @@ public class ValidateCodeServiceImpl implements ValidateCodeService
         redisService.setCacheObject(verifyKey, code, Constants.CAPTCHA_EXPIRATION, TimeUnit.MINUTES);
         // 转换流信息写出
         FastByteArrayOutputStream os = new FastByteArrayOutputStream();
-        try
-        {
+        try {
             ImageIO.write(image, "jpg", os);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             return AjaxResult.error(e.getMessage());
         }
 
@@ -94,26 +103,45 @@ public class ValidateCodeServiceImpl implements ValidateCodeService
     }
 
     /**
-     * 校验验证码
+     * 校验后台图片验证码
      */
     @Override
-    public void checkCaptcha(String code, String uuid) throws CaptchaException
-    {
-        if (StringUtils.isEmpty(code))
-        {
+    public void checkCaptcha(String code, String uuid) throws CaptchaException {
+        if (StringUtils.isEmpty(code)) {
             throw new CaptchaException("验证码不能为空");
         }
-        if (StringUtils.isEmpty(uuid))
-        {
+        if (StringUtils.isEmpty(uuid)) {
             throw new CaptchaException("验证码已失效");
         }
         String verifyKey = CacheConstants.CAPTCHA_CODE_KEY + uuid;
         String captcha = redisService.getCacheObject(verifyKey);
         redisService.deleteObject(verifyKey);
 
-        if (!code.equalsIgnoreCase(captcha))
-        {
+        if (!code.equalsIgnoreCase(captcha)) {
             throw new CaptchaException("验证码错误");
         }
     }
+
+    /**
+     * 检查阿里云滑动验证
+     *
+     * @param request 阿里云滑动验证请求数据
+     * @throws CaptchaException 验证码错误
+     */
+    @Override
+    public void checkAliValidate(AuthenticateSigRequest request) throws CaptchaException {
+        try {
+            IAcsClient client = aliyunClientProfile.getAfsClient();
+            request.setAppKey(aliyunClientProfile.getAppKey());
+            request.setRemoteIp(aliyunClientProfile.getRemoteIp());
+            AuthenticateSigResponse response = client.getAcsResponse(request);
+            if (response.getCode() != ALI_VALIDATE_SUCCESS_CODE) {
+                throw new CaptchaException("滑动验证失败:" + response.getCode());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CaptchaException("滑动验证失败:" + e.getMessage());
+        }
+    }
+
 }
